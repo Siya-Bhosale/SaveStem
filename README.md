@@ -1,1 +1,2 @@
 # SaveStem
+This website provides essential information about stem cell donation and preservation, aiming to raise awareness and encourage life-saving actions. It explains what stem cells are, how donation works, and why preserving stem cells—especially from umbilical cord blood—is important. The page also lists hospitals and organizations across India where you can donate or preserve stem cells, helping people find trusted centers easily. Whether you're a potential donor, parent, or just curious, this site is your guide to understanding the power of stem cells.
