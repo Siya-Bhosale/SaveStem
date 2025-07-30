@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stem Cell Donation Awareness</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #006d77;
+      --secondary-color: #edf6f9;
+      --accent-color: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: var(--secondary-color);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary-color);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      animation: fadeInDown 1s ease;
+      position: relative;
+    }
+
+    header img {
+      height: 80px;
+      margin-bottom: 10px;
+    }
+
+    #language-selector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    section {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+      animation: fadeInUp 1s ease;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .stat {
+      background: var(--primary-color);
+      color: white;
+      padding: 20px;
+      flex: 1;
+      min-width: 200px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: var(--accent-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    select {
+      margin: 8px 0;
+      padding: 6px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background: #003845;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 50px;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Stem Cell Logo" />
+    <h1 id="main-title">Stem Cell Donation Awareness</h1>
+    <select id="language-selector">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="mr">मराठी</option>
+    </select>
+  </header>
+
+  <section>
+    <div class="card">
+      <h2 id="what-heading">What is Stem Cell Donation?</h2>
+      <p id="what-desc">Stem cell donation is a life-saving procedure where healthy individuals donate their stem cells to help patients with blood cancers and other life-threatening diseases.</p>
+    </div>
+
+    <div class="card">
+      <h2 id="stats-heading">Donation Statistics</h2>
+      <div class="stats">
+        <div class="stat">
+          <h3>India</h3>
+          <p id="india-stats">Less than 0.04% of the population is registered as a stem cell donor.</p>
+        </div>
+        <div class="stat">
+          <h3>Global</h3>
+          <p id="global-stats">Over 37 million registered stem cell donors worldwide.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="how-heading">How Can You Donate?</h2>
+      <p id="how-desc">To donate stem cells, register with an authorized organization like DATRI or DKMS-BMST. If you match with a patient, a simple and painless procedure will be followed to collect your stem cells.</p>
+      <a href="https://datri.org/become-a-donor/" target="_blank" class="button">Register with DATRI</a>
+      <a href="https://www.dkms-bmst.org/register" target="_blank" class="button">Register with DKMS-BMST</a>
+    </div>
+
+    <div class="card">
+      <h2 id="gov-heading">Government Schemes</h2>
+      <ul id="gov-list">
+        <li><strong>Ayushman Bharat - PMJAY:</strong> Covers bone marrow transplants for poor families.</li>
+        <li><strong>Health Minister’s Cancer Patient Fund:</strong> Financial help for treatment.</li>
+        <li><strong>CM Relief Funds:</strong> Available in many states for transplant support.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 id="hospital-heading">Where to Donate in India</h2>
+      <label for="state">Select State:</label>
+      <select id="state">
+        <option value="">--Select State--</option>
+        <option value="maharashtra">Maharashtra</option>
+        <option value="tamilnadu">Tamil Nadu</option>
+        <option value="delhi">Delhi</option>
+        <option value="karnataka">Karnataka</option>
+      <option value="uttar_pradesh">Uttar Pradesh</option>
+      <option value="haryana">Haryana</option>
+      <option value="west_bengal">West Bengal</option>
+      <option value="Andhra Pradesh">Andhra Pradesh</option>
+      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+      <option value="Assam">Assam</option>
+      <option value="Bihar">Bihar</option>
+       <option value="Chhattisgarh">Chhattisgarh</option>
+      <option value="Goa">Goa</option>
+      <option value="Gujarat">Gujarat</option>
+      <option value="Himachal Pradesh">Himachal Pradesh</option>
+      <option value="Jharkhand">Jharkhand</option>
+      <option value="Kerala">Kerala</option>
+      <option value="Madhya Pradesh">Madhya Pradesh</option>
+      <option value="Manipur">Manipur</option>
+      <option value="Meghalaya">Meghalaya</option>
+      <option value="Mizoram">Mizoram</option>
+       <option value="Nagaland">Nagaland</option>
+      <option value="Odisha">Odisha</option>
+      <option value="Punjab">Punjab</option>
+      <option value="Rajasthan">Rajasthan</option>
+      <option value="Sikkim">Sikkim</option>
+      <option value="Telangana">Telangana</option>
+      <option value="Tripura">Tripura</option>
+      <option value="Uttar Pradesh">Uttar Pradesh</option>
+      <option value="Uttarakhand">Uttarakhand</option>
+      <option value="West Bengal">West Bengal</option>
+      
+      </select>
+
+      <label for="city">Select City:</label>
+      <select id="city">
+        <option value="">--Select City--</option>
+      </select>
+
+      <ul id="hospital-list"></ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Stem Cell Awareness | Built to Save Lives 💙</p>
+  </footer>
+
+  <script>
+    const translations = {
+      hi: {
+        "main-title": "स्टेम सेल दान जागरूकता",
+        "what-heading": "स्टेम सेल दान क्या है?",
+        "what-desc": "स्टेम सेल दान एक जीवनरक्षक प्रक्रिया है जिसमें स्वस्थ व्यक्ति अपने स्टेम सेल रक्त कैंसर जैसे रोगों से पीड़ित मरीजों के लिए दान करते हैं।",
+        "stats-heading": "दान सांख्यिकी",
+        "india-stats": "भारत में केवल 0.04% लोग स्टेम सेल डोनर हैं।",
+        "global-stats": "दुनियाभर में 37 मिलियन से अधिक पंजीकृत डोनर हैं।",
+        "how-heading": "आप कैसे दान कर सकते हैं?",
+        "how-desc": "आप DATRI या DKMS-BMST जैसी संस्थाओं में रजिस्टर करें। अगर आप मैच करते हैं, तो स्टेम सेल को सुरक्षित तरीके से निकाला जाता है।",
+        "gov-heading": "सरकारी योजनाएं",
+        "hospital-heading": "भारत में कहां दान करें"
+      },
+      mr: {
+        "main-title": "स्टेम सेल दान जनजागृती",
+        "what-heading": "स्टेम सेल दान म्हणजे काय?",
+        "what-desc": "स्टेम सेल दान ही एक जीवन वाचवणारी प्रक्रिया आहे जिथे निरोगी लोक आपले स्टेम सेल रुग्णांना दान करतात.",
+        "stats-heading": "दान आकडेवारी",
+        "india-stats": "भारतामध्ये 0.04% पेक्षा कमी लोक नोंदणीकृत दाते आहेत.",
+        "global-stats": "जगभरात ३७ दशलक्षाहून अधिक नोंदणीकृत दाते आहेत.",
+        "how-heading": "तुम्ही कसे दान करू शकता?",
+        "how-desc": "DATRI किंवा DKMS-BMST मध्ये नोंदणी करा. जर तुम्ही जुळला तर, एक सुरक्षित प्रक्रिया वापरून स्टेम सेल काढले जातात.",
+        "gov-heading": "सरकारी योजना",
+        "hospital-heading": "भारतामध्ये दान करण्याची ठिकाणे"
+      }
+    };
+
+    const hospitals = {
+      maharashtra: {
+        mumbai: [
+          { name: "Tata Memorial Hospital", contact: "022 2417 7000", link: "https://tmc.gov.in" },
+          { name: "Jaslok Hospital", contact: "022 6657 3000", link: "https://www.jaslokhospital.net/" }
+        ],
+        pune: [
+          { name: "Ruby Hall Clinic", contact: "020 6645 5000", link: "https://rubyhall.com" },
+          { name: "Jehangir Hospital", contact: "020 6681 9999", link: "https://jehangirhospital.com" }
+        ],
+        nagpur: [
+          { name: "Orange City Hospital", contact: "0712 663 4800", link: "https://www.orangehospitals.com/" },
+          { name: "KRIMS Hospitals", contact: "0712 245 1188", link: "http://krimshospitals.com/" }
+        ],
+        nashik: [
+          { name: "Wockhardt Hospitals", contact: "0253 662 4444", link: "https://www.wockhardthospitals.com/" }
+        ],
+        aurangabad: [
+          { name: "Kamalnayan Bajaj Hospital", contact: "0240 660 2222", link: "https://www.kamalhospital.org/" }
+        ],
+        kolhapur: [
+          { name: "Aster Aadhar Hospital", contact: "0231 662 4444", link: "https://www.asterhospitals.in/" }
+        ],
+        solapur: [],
+        thane: [],
+        navi_mumbai: [],
+        amravati: [],
+        latur: [],
+        sangli: [],
+        jalgaon: [],
+        akola: [],
+        satara: [],
+        chandrapur: [],
+        beed: [],
+        nanded: [],
+        osmanabad: [],
+        parbhani: [],
+        yavatmal: [],
+        ratnagiri: [],
+        sindhudurg: [],
+        washim: [],
+        hingoli: [],
+        gadchiroli: [],
+        bhandara: [],
+        gondia: []
+      },
+      tamilnadu: {
+        chennai: [
+          { name: "Apollo Hospitals", contact: "044 2829 3333", link: "https://www.apollohospitals.com" },
+          { name: "CMC Vellore", contact: "0416 228 1000", link: "https://www.cmch-vellore.edu/" }
+        ]
+      },
+      delhi: {
+        delhi: [
+          { name: "AIIMS Delhi", contact: "011 2658 8500", link: "https://www.aiims.edu" },
+          { name: "BLK-Max Hospital", contact: "011 3040 3040", link: "https://www.blkhospital.com" }
+        ]
+      }
+    };
+
+    document.getElementById("language-selector").addEventListener("change", function () {
+      const lang = this.value;
+      if (translations[lang]) {
+        Object.entries(translations[lang]).forEach(([id, text]) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = text;
+        });
+      } else {
+        location.reload();
+      }
+    });
+
+    document.getElementById("state").addEventListener("change", function () {
+      const state = this.value;
+      const citySelect = document.getElementById("city");
+      citySelect.innerHTML = '<option value="">--Select City--</option>';
+
+      if (hospitals[state]) {
+        Object.keys(hospitals[state]).forEach(city => {
+          const option = document.createElement("option");
+          option.value = city;
+          option.textContent = city.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          citySelect.appendChild(option);
+        });
+      }
+    });
+
+    document.getElementById("city").addEventListener("change", function () {
+      const state = document.getElementById("state").value;
+      const city = this.value;
+      const list = document.getElementById("hospital-list");
+      list.innerHTML = "";
+
+      if (hospitals[state] && hospitals[state][city]) {
+        hospitals[state][city].forEach(hospital => {
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="${hospital.link}" target="_blank">${hospital.name}</a> — 📞 ${hospital.contact}`;
+          list.appendChild(li);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
