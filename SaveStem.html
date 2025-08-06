@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveStem - Stem Cell Donation and Preservation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .hero-section {
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+        }
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: none;
+            flex-direction: column;
+            background-color: white;
+            z-index: 1000;
+        }
+        .dark .chat-widget { background-color: #1f2937; }
+        .chat-header {
+            background-color: #6366f1;
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-body {
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .dark .chat-body { background-color: #374151; }
+        .chat-footer {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .dark .chat-footer { border-top-color: #4b5563; }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            word-wrap: break-word;
+        }
+        .user-bubble {
+            background-color: #dbeafe;
+            color: #1e40af;
+            align-self: flex-end;
+        }
+        .bot-bubble {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            align-self: flex-start;
+        }
+        .dark .user-bubble { background-color: #4f46e5; color: #e0e7ff; }
+        .dark .bot-bubble { background-color: #4b5563; color: #d1d5db; }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #6366f1;
+            animation: spin 1s ease infinite;
+            margin: 2rem auto;
+        }
+        .dark .loading-spinner { border-left-color: #a78bfa; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .story-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img src="https://i.ibb.co/9vR0w2g/stem-cell-logo.png" alt="SaveStem Logo" class="w-8 h-8">
+                <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400" data-translate-key="website_name">SaveStem</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_about">About</a>
+                <a href="#donation" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_donation">Donation</a>
+                <a href="#inspiration" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_inspiration">Inspiration</a>
+                <a href="#hospitals" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_hospitals">Hospitals</a>
+                <a href="#faq" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_faq">FAQ</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <select id="language-select" class="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-1 px-2 text-sm">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+                <button id="theme-toggle" class="text-gray-600 dark:text-gray-300">
+                    <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden flex items-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pt-2 pb-4 space-y-2 bg-white dark:bg-gray-800">
+             <a href="#about" class="block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_about">About</a>
+            <a href="#donation" class="block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_donation">Donation</a>
+            <a href="#inspiration" class="block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_inspiration">Inspiration</a>
+            <a href="#hospitals" class="block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_hospitals">Hospitals</a>
+            <a href="#faq" class="block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400" data-translate-key="nav_faq">FAQ</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-white">
+        <div class="container mx-auto px-6 py-20 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4" data-translate-key="hero_title">Be a Lifesaver: Donate Stem Cells</h1>
+            <p class="text-lg md:text-xl mb-8" data-translate-key="hero_subtitle">Your decision to donate can give someone a second chance at life. Learn how you can make a difference.</p>
+            <a href="#donation" class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition duration-300" data-translate-key="hero_button">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- About Section -->
+        <section id="about" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="about_title">What are Stem Cells?</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="mb-4" data-translate-key="about_p1">Stem cells are special human cells that have the ability to develop into many different cell types, from muscle cells to brain cells. In some cases, they can also repair damaged tissues. Researchers and doctors hope stem cell therapies can be used to treat many medical conditions.</p>
+                    <p data-translate-key="about_p2">Stem cell donation is a process where a volunteer donates their stem cells, which can then be transplanted into a patient to treat diseases like leukemia, lymphoma, and other blood disorders. Stem cell preservation, often done with umbilical cord blood, involves storing stem cells for potential future use.</p>
+                </div>
+                <div>
+                    <img src="https://i.ibb.co/yBNhWdZ/children-smiling.jpg" alt="Happy Children" class="rounded-lg shadow-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Donation Ratio Chart -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="chart_title">Monthly Stem Cell Donation Ratio (Illustrative)</h2>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+                <canvas id="donationPieChart"></canvas>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4" data-translate-key="chart_subtitle">This chart is for illustrative purposes to show the potential sources of stem cell donations in a month.</p>
+            </div>
+        </section>
+
+        <!-- Donation Process Section -->
+        <section id="donation" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="process_title">The Stem Cell Donation Process</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="text-indigo-600 mb-4"><svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg></div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="process_step1_title">1. Registration</h3>
+                    <p data-translate-key="process_step1_desc">Join a stem cell registry. This involves a simple cheek swab to determine your tissue type.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="text-indigo-600 mb-4"><svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h2M9 7h6m-6 4h6m-6 4h6"></path></svg></div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="process_step2_title">2. Matching</h3>
+                    <p data-translate-key="process_step2_desc">If you are a match for a patient, you'll be contacted for further testing and to confirm you are willing to donate.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="text-indigo-600 mb-4"><svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="process_step3_title">3. Donation</h3>
+                    <p data-translate-key="process_step3_desc">The most common method is PBSC donation, similar to donating plasma. Bone marrow donation is a less common surgical procedure.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Divider -->
+        <section class="mb-16">
+            <img src="https://i.ibb.co/R4g30v3/community-image.jpg" alt="A community of people" class="rounded-lg shadow-lg w-full h-auto object-cover">
+        </section>
+
+        <!-- Real Life Stories Section -->
+        <section id="inspiration" class="mb-16 bg-indigo-50 dark:bg-gray-800 p-8 rounded-lg">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="inspiration_title">Stories of Hope</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg story-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEknwKgmlP1qGV_s5YyVIGXlkQiUeICcx2Mw&s" alt="Young girl smiling" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="story1_title">Riya's second life</h3>
+                    <p class="text-gray-700 dark:text-gray-300" data-translate-key="story1_desc">Seven-year-old Riya was battling leukemia when a stranger's selfless donation gave her a new lease on life. Her donor, a young college student, said, "It was a simple act, but seeing her smile today makes it the most meaningful thing I've ever done."</p>
+                </div>
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg story-card">
+                    <img src="https://www.shutterstock.com/image-photo/happy-smiling-caring-friendly-doctor-260nw-2178870899.jpg" alt="Man looking hopeful" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="story2_title">Amit's Journey to Recovery</h3>
+                    <p class="text-gray-700 dark:text-gray-300" data-translate-key="story2_desc">For Amit, a 35-year-old father, a stem cell transplant was his only hope against a rare blood disorder. He was matched with a donor from another state. "I am forever grateful to the person who gave me back my future with my family," he shares.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NGOs and Government Schemes -->
+        <section class="mb-16">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4" data-translate-key="ngo_title">NGOs & Registries</h3>
+                    <ul class="space-y-4">
+                        <li class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                            <a href="https://datri.org/" target="_blank" class="font-semibold text-indigo-600 dark:text-indigo-400">DATRI</a>
+                            <p data-translate-key="ngo1_desc">A leading blood stem cell donors registry in India.</p>
+                        </li>
+                        <li class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                            <a href="https://www.dkms-bmst.org/en" target="_blank" class="font-semibold text-indigo-600 dark:text-indigo-400">DKMS BMST Foundation India</a>
+                            <p data-translate-key="ngo2_desc">A non-profit organization dedicated to fighting blood cancer.</p>
+                        </li>
+                         <li class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                            <a href="https://notto.mohfw.gov.in/" target="_blank" class="font-semibold text-indigo-600 dark:text-indigo-400">NOTTO</a>
+                            <p data-translate-key="ngo3_desc">National Organ and Tissue Transplant Organization.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4" data-translate-key="schemes_title">Government Schemes</h3>
+                    <ul class="space-y-4">
+                        <li class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                            <h4 class="font-semibold text-indigo-600 dark:text-indigo-400" data-translate-key="scheme1_title">Thalassemia Bal Sewa Yojana</h4>
+                            <p data-translate-key="scheme1_desc">A Coal India CSR initiative providing financial assistance for bone marrow transplants for Thalassemia and Aplastic Anaemia patients.</p>
+                        </li>
+                        <li class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                            <h4 class="font-semibold text-indigo-600 dark:text-indigo-400" data-translate-key="scheme2_title">Financial Assistance under Rashtriya Arogaya Nidhi (RAN)</h4>
+                             <p data-translate-key="scheme2_desc">Provides financial assistance to patients, living below poverty line, who are suffering from major life threatening diseases, to receive medical treatment at any of the super speciality Hospitals/Institutes.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="contact_title">Connect With Us</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div id="contact-chat-button" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
+                    <div class="text-indigo-600 mb-4"><svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg></div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="contact_chat_title">Chat with our AI Bot</h3>
+                    <p data-translate-key="contact_chat_desc">Get instant answers from our AI-powered assistant.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="text-indigo-600 mb-4"><svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="contact_call_title">Call Us</h3>
+                    <p class="text-lg font-semibold text-indigo-600 dark:text-indigo-400">1800-123-4567</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hospital Locator -->
+        <section id="hospitals" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="hospitals_title">Find a Hospital</h2>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="state-select" class="block text-sm font-medium" data-translate-key="hospitals_state">State</label>
+                        <select id="state-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="" data-translate-key="hospitals_select_state">Select State</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="city-select" class="block text-sm font-medium" data-translate-key="hospitals_city">City</label>
+                        <select id="city-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="" data-translate-key="hospitals_select_city">Select City</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="hospital-list" class="space-y-4">
+                    <!-- Hospital information will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8" data-translate-key="faq_title">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                    <button class="w-full text-left font-semibold text-lg flex justify-between items-center faq-question">
+                        <span data-translate-key="faq1_q">Is stem cell donation painful?</span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer hidden mt-2" data-translate-key="faq1_a">
+                        The most common method, PBSC donation, is not painful and is similar to donating plasma. For bone marrow donation, it is a surgical procedure done under general anesthesia, so you won't feel pain during the procedure. You may feel some soreness in your lower back for a few days afterward.
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                    <button class="w-full text-left font-semibold text-lg flex justify-between items-center faq-question">
+                        <span data-translate-key="faq2_q">Are there any risks to donating?</span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer hidden mt-2" data-translate-key="faq2_a">
+                        Donating stem cells is very safe. For PBSC donation, the medication you receive to increase stem cells can cause temporary side effects like bone pain, muscle aches, or headaches. For bone marrow donation, risks are the same as any procedure involving anesthesia. Your body replaces the donated stem cells within a few weeks.
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                    <button class="w-full text-left font-semibold text-lg flex justify-between items-center faq-question">
+                        <span data-translate-key="faq3_q">Who is eligible to donate?</span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer hidden mt-2" data-translate-key="faq3_a">
+                        Generally, donors must be between 18 and 44 years old and in good health. Certain medical conditions may make you ineligible. The specific criteria can be found on the websites of stem cell registries.
+                    </div>
+                </div>
+                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                    <button class="w-full text-left font-semibold text-lg flex justify-between items-center faq-question">
+                        <span data-translate-key="faq4_q">Does it cost anything to become a donor?</span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer hidden mt-2" data-translate-key="faq4_a">
+                        No, there is no cost to the donor. All medical and travel expenses are covered by the registry or the patient's insurance.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chatbot Widget -->
+    <button id="chat-open-button" class="fixed bottom-5 right-5 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+    </button>
+    <div id="chat-widget" class="chat-widget">
+        <div class="chat-header">
+            <h3 class="font-bold" data-translate-key="chatbot_title">✨ Stem Cell AI Bot</h3>
+            <button id="chat-close-button">&times;</button>
+        </div>
+        <div id="chat-body" class="chat-body">
+            <div class="bot-bubble" data-translate-key="chatbot_welcome">Hello! I'm the SaveStem AI Bot. How can I help you with your questions about stem cell donation?</div>
+        </div>
+        <div class="chat-footer">
+            <div class="flex">
+                <input type="text" id="chat-input" class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500" placeholder="Ask a question...">
+                <button id="chat-send-button" class="bg-indigo-600 text-white px-4 py-2 rounded-r-md hover:bg-indigo-700" data-translate-key="chatbot_send">Send</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="container mx-auto px-6 py-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="website_name">SaveStem</h3>
+                    <p class="text-gray-400" data-translate-key="footer_desc">Promoting awareness and facilitating stem cell donation to save lives.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="footer_links">Quick Links</h3>
+                    <ul>
+                        <li><a href="#about" class="text-gray-400 hover:text-white" data-translate-key="nav_about">About</a></li>
+                        <li><a href="#donation" class="text-gray-400 hover:text-white" data-translate-key="nav_donation">Donation</a></li>
+                        <li><a href="#hospitals" class="text-gray-400 hover:text-white" data-translate-key="nav_hospitals">Find Hospitals</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white" data-translate-key="nav_faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2" data-translate-key="footer_disclaimer_title">Disclaimer</h3>
+                    <p class="text-gray-400 text-sm" data-translate-key="footer_disclaimer_text">This website provides general information and is not a substitute for professional medical advice. Please consult with a healthcare provider for any medical concerns.</p>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-6 text-center text-gray-500">
+                &copy; 2025 SaveStem. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- GEMINI API SETUP ---
+        const apiKey = ""; // This will be handled by the environment.
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        async function callGeminiAPI(prompt) {
+            const payload = {
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    return "Sorry, I couldn't generate a response. Please try again.";
+                }
+
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "There was an error connecting to the AI service. Please check the console for details.";
+            }
+        }
+        
+        // --- TRANSLATION AND THEME SETUP ---
+        const translations = {
+            en: {
+                website_name: "SaveStem",
+                nav_about: "About",
+                nav_donation: "Donation",
+                nav_inspiration: "Inspiration",
+                nav_hospitals: "Hospitals",
+                nav_faq: "FAQ",
+                hero_title: "Be a Lifesaver: Donate Stem Cells",
+                hero_subtitle: "Your decision to donate can give someone a second chance at life. Learn how you can make a difference.",
+                hero_button: "Learn More",
+                about_title: "What are Stem Cells?",
+                about_p1: "Stem cells are special human cells that have the ability to develop into many different cell types, from muscle cells to brain cells. In some cases, they can also repair damaged tissues. Researchers and doctors hope stem cell therapies can be used to treat many medical conditions.",
+                about_p2: "Stem cell donation is a process where a volunteer donates their stem cells, which can then be transplanted into a patient to treat diseases like leukemia, lymphoma, and other blood disorders. Stem cell preservation, often done with umbilical cord blood, involves storing stem cells for potential future use.",
+                chart_title: "Monthly Stem Cell Donation Ratio (Illustrative)",
+                chart_subtitle: "This chart is for illustrative purposes to show the potential sources of stem cell donations in a month.",
+                process_title: "The Stem Cell Donation Process",
+                process_step1_title: "1. Registration",
+                process_step1_desc: "Join a stem cell registry. This involves a simple cheek swab to determine your tissue type.",
+                process_step2_title: "2. Matching",
+                process_step2_desc: "If you are a match for a patient, you'll be contacted for further testing and to confirm you are willing to donate.",
+                process_step3_title: "3. Donation",
+                process_step3_desc: "The most common method is PBSC donation, similar to donating plasma. Bone marrow donation is a less common surgical procedure.",
+                inspiration_title: "Stories of Hope",
+                story1_title: "Riya's Second Chance",
+                story1_desc: "Seven-year-old Riya was battling leukemia when a stranger's selfless donation gave her a new lease on life. Her donor, a young college student, said, 'It was a simple act, but seeing her smile today makes it the most meaningful thing I've ever done.'",
+                story2_title: "Amit's Journey to Recovery",
+                story2_desc: "For Amit, a 35-year-old father, a stem cell transplant was his only hope against a rare blood disorder. He was matched with a donor from another state. 'I am forever grateful to the person who gave me back my future with my family,' he shares.",
+                ngo_title: "NGOs & Registries",
+                ngo1_desc: "A leading blood stem cell donors registry in India.",
+                ngo2_desc: "A non-profit organization dedicated to fighting blood cancer.",
+                ngo3_desc: "National Organ and Tissue Transplant Organization.",
+                schemes_title: "Government Schemes",
+                scheme1_title: "Thalassemia Bal Sewa Yojana",
+                scheme1_desc: "A Coal India CSR initiative providing financial assistance for bone marrow transplants for Thalassemia and Aplastic Anaemia patients.",
+                scheme2_title: "Financial Assistance under Rashtriya Arogaya Nidhi (RAN)",
+                scheme2_desc: "Provides financial assistance to patients, living below poverty line, who are suffering from major life threatening diseases, to receive medical treatment at any of the super speciality Hospitals/Institutes.",
+                contact_title: "Connect With Us",
+                contact_chat_title: "Chat with our AI Bot",
+                contact_chat_desc: "Get instant answers from our AI-powered assistant.",
+                contact_call_title: "Call Us",
+                hospitals_title: "Find a Hospital",
+                hospitals_state: "State",
+                hospitals_city: "City",
+                hospitals_select_state: "Select State",
+                hospitals_select_city: "Select City",
+                hospitals_no_results: "No results found for the selected city.",
+                faq_title: "Frequently Asked Questions",
+                faq1_q: "Is stem cell donation painful?",
+                faq1_a: "The most common method, PBSC donation, is not painful and is similar to donating plasma. For bone marrow donation, it is a surgical procedure done under general anesthesia, so you won't feel pain during the procedure. You may feel some soreness in your lower back for a few days afterward.",
+                faq2_q: "Are there any risks to donating?",
+                faq2_a: "Donating stem cells is very safe. For PBSC donation, the medication you receive to increase stem cells can cause temporary side effects like bone pain, muscle aches, or headaches. For bone marrow donation, risks are the same as any procedure involving anesthesia. Your body replaces the donated stem cells within a few weeks.",
+                faq3_q: "Who is eligible to donate?",
+                faq3_a: "Generally, donors must be between 18 and 44 years old and in good health. Certain medical conditions may make you ineligible. The specific criteria can be found on the websites of stem cell registries.",
+                faq4_q: "Does it cost anything to become a donor?",
+                faq4_a: "No, there is no cost to the donor. All medical and travel expenses are covered by the registry or the patient's insurance.",
+                chatbot_title: "✨ Stem Cell AI Bot",
+                chatbot_welcome: "Hello! I'm the SaveStem AI Bot. How can I help you with your questions about stem cell donation?",
+                chatbot_send: "Send",
+                chatbot_placeholder: "Ask a question...",
+                footer_desc: "Promoting awareness and facilitating stem cell donation to save lives.",
+                footer_links: "Quick Links",
+                footer_disclaimer_title: "Disclaimer",
+                footer_disclaimer_text: "This website provides general information and is not a substitute for professional medical advice. Please consult with a healthcare provider for any medical concerns."
+            },
+            hi: {
+                website_name: "सेवस्टेम",
+                nav_about: "हमारे बारे में",
+                nav_donation: "दान",
+                nav_inspiration: "प्रेरणा",
+                nav_hospitals: "अस्पताल",
+                nav_faq: "अक्सर पूछे जाने वाले प्रश्न",
+                hero_title: "जीवनदाता बनें: स्टेम सेल दान करें",
+                hero_subtitle: "आपका दान करने का निर्णय किसी को जीवन का दूसरा मौका दे सकता है। जानें कि आप कैसे बदलाव ला सकते हैं।",
+                hero_button: "और जानें",
+                about_title: "स्टेम सेल क्या हैं?",
+                about_p1: "स्टेम कोशिकाएं विशेष मानव कोशिकाएं हैं जिनमें मांसपेशियों की कोशिकाओं से लेकर मस्तिष्क की कोशिकाओं तक कई विभिन्न प्रकार की कोशिकाओं में विकसित होने की क्षमता होती है। कुछ मामलों में, वे क्षतिग्रस्त ऊतकों की मरम्मत भी कर सकते हैं। शोधकर्ताओं और डॉक्टरों को उम्मीद है कि स्टेम सेल थेरेपी का उपयोग कई चिकित्सा स्थितियों के इलाज के लिए किया जा सकता है।",
+                about_p2: "स्टेम सेल दान एक ऐसी प्रक्रिया है जहां एक स्वयंसेवक अपनी स्टेम कोशिकाओं का दान करता है, जिन्हें बाद में ल्यूकेमिया, लिम्फोमा और अन्य रक्त विकारों जैसी बीमारियों के इलाज के लिए एक रोगी में प्रत्यारोपित किया जा सकता है। स्टेम सेल संरक्षण, जो अक्सर गर्भनाल रक्त के साथ किया जाता है, में भविष्य में संभावित उपयोग के लिए स्टेम कोशिकाओं का भंडारण शामिल है।",
+                chart_title: "मासिक स्टेम सेल दान अनुपात (उदाहरण)",
+                chart_subtitle: "यह चार्ट एक महीने में स्टेम सेल दान के संभावित स्रोतों को दर्शाने के उदाहरण के उद्देश्यों के लिए है।",
+                process_title: "स्टेम सेल दान प्रक्रिया",
+                process_step1_title: "1. पंजीकरण",
+                process_step1_desc: "एक स्टेम सेल रजिस्ट्री में शामिल हों। इसमें आपके ऊतक प्रकार का निर्धारण करने के लिए एक साधारण गाल स्वैब शामिल है।",
+                process_step2_title: "2. मिलान",
+                process_step2_desc: "यदि आप किसी रोगी के लिए एक मैच हैं, तो आपसे आगे के परीक्षण के लिए संपर्क किया जाएगा और यह पुष्टि करने के लिए कि आप दान करने के इच्छुक हैं।",
+                process_step3_title: "3. दान",
+                process_step3_desc: "सबसे आम तरीका पीबीएससी दान है, जो प्लाज्मा दान करने के समान है। अस्थि मज्जा दान एक कम आम शल्य प्रक्रिया है।",
+                inspiration_title: "आशा की कहानियाँ",
+                story1_title: "रिया को मिला दूसरा मौका",
+                story1_desc: "सात वर्षीय रिया ल्यूकेमिया से जूझ रही थी जब एक अजनबी के निस्वार्थ दान ने उसे जीवन का एक नया पट्टा दिया। उसके दाता, एक युवा कॉलेज छात्र ने कहा, 'यह एक साधारण कार्य था, लेकिन आज उसे मुस्कुराते हुए देखना मेरे द्वारा किए गए सबसे सार्थक काम को बनाता है।'",
+                story2_title: "अमित की रिकवरी की यात्रा",
+                story2_desc: "35 वर्षीय पिता अमित के लिए, एक दुर्लभ रक्त विकार के खिलाफ एक स्टेम सेल प्रत्यारोपण ही उनकी एकमात्र आशा थी। उनका एक अन्य राज्य के दाता के साथ मिलान किया गया था। 'मैं उस व्यक्ति का हमेशा आभारी रहूंगा जिसने मुझे मेरे परिवार के साथ मेरा भविष्य वापस दिया,' वे साझा करते हैं।",
+                ngo_title: "गैर सरकारी संगठन और रजिस्ट्रियां",
+                ngo1_desc: "भारत में एक प्रमुख रक्त स्टेम सेल दाताओं की रजिस्ट्री।",
+                ngo2_desc: "रक्त कैंसर से लड़ने के लिए समर्पित एक गैर-लाभकारी संगठन।",
+                ngo3_desc: "राष्ट्रीय अंग और ऊतक प्रत्यारोपण संगठन।",
+                schemes_title: "सरकारी योजनाएं",
+                scheme1_title: "थैलेसीमिया बाल सेवा योजना",
+                scheme1_desc: "थैलेसीमिया और अप्लास्टिक एनीमिया के रोगियों के लिए अस्थि मज्जा प्रत्यारोपण के लिए वित्तीय सहायता प्रदान करने वाली कोल इंडिया की सीएसआर पहल।",
+                scheme2_title: "राष्ट्रीय आरोग्य निधि (RAN) के तहत वित्तीय सहायता",
+                scheme2_desc: "गरीबी रेखा से नीचे रहने वाले रोगियों को वित्तीय सहायता प्रदान करता है, जो प्रमुख जीवन-धमकाने वाली बीमारियों से पीड़ित हैं, ताकि वे किसी भी सुपर स्पेशियलिटी अस्पताल/संस्थान में चिकित्सा उपचार प्राप्त कर सकें।",
+                contact_title: "हमसे जुड़ें",
+                contact_chat_title: "हमारे एआई बॉट से चैट करें",
+                contact_chat_desc: "हमारे एआई-संचालित सहायक से तत्काल उत्तर प्राप्त करें।",
+                contact_call_title: "हमें कॉल करें",
+                hospitals_title: "एक अस्पताल खोजें",
+                hospitals_state: "राज्य",
+                hospitals_city: "शहर",
+                hospitals_select_state: "राज्य चुनें",
+                hospitals_select_city: "शहर चुनें",
+                hospitals_no_results: "चुने हुए शहर के लिए कोई परिणाम नहीं मिला।",
+                faq_title: "अक्सर पूछे जाने वाले प्रश्न",
+                faq1_q: "क्या स्टेम सेल दान दर्दनाक है?",
+                faq1_a: "सबसे आम तरीका, पीबीएससी दान, दर्दनाक नहीं है और प्लाज्मा दान करने के समान है। अस्थि मज्जा दान के लिए, यह सामान्य एनेस्थीसिया के तहत की जाने वाली एक शल्य प्रक्रिया है, इसलिए आपको प्रक्रिया के दौरान दर्द महसूस नहीं होगा। आपको कुछ दिनों के लिए अपनी पीठ के निचले हिस्से में कुछ दर्द महसूस हो सकता है।",
+                faq2_q: "क्या दान करने के कोई जोखिम हैं?",
+                faq2_a: "स्टेम सेल दान करना बहुत सुरक्षित है। पीबीएससी दान के लिए, स्टेम कोशिकाओं को बढ़ाने के लिए आपको जो दवा मिलती है, उससे हड्डी में दर्द, मांसपेशियों में दर्द या सिरदर्द जैसे अस्थायी दुष्प्रभाव हो सकते हैं। अस्थि मज्जा दान के लिए, जोखिम किसी भी प्रक्रिया के समान हैं जिसमें एनेस्थीसिया शामिल है। आपका शरीर कुछ हफ्तों के भीतर दान की गई स्टेम कोशिकाओं को बदल देता है।",
+                faq3_q: "कौन दान करने के योग्य है?",
+                faq3_a: "आम तौर पर, दाताओं की आयु 18 से 44 वर्ष के बीच होनी चाहिए और वे अच्छे स्वास्थ्य में होने चाहिए। कुछ चिकित्सीय स्थितियां आपको अयोग्य बना सकती हैं। विशिष्ट मानदंड स्टेम सेल रजिस्ट्रियों की वेबसाइटों पर पाए जा सकते हैं।",
+                faq4_q: "क्या दाता बनने के लिए कुछ खर्च होता है?",
+                faq4_a: "नहीं, दाता के लिए कोई लागत नहीं है। सभी चिकित्सा और यात्रा व्यय रजिस्ट्री या रोगी के बीमा द्वारा कवर किए जाते हैं।",
+                chatbot_title: "✨ स्टेम सेल एआई बॉट",
+                chatbot_welcome: "नमस्ते! मैं सेवस्टेम एआई बॉट हूं। मैं स्टेम सेल दान के बारे में आपके सवालों में आपकी कैसे मदद कर सकता हूं?",
+                chatbot_send: "भेजें",
+                chatbot_placeholder: "एक सवाल पूछें...",
+                footer_desc: "जागरूकता को बढ़ावा देना और जीवन बचाने के लिए स्टेम सेल दान की सुविधा प्रदान करना।",
+                footer_links: "त्वरित लिंक",
+                footer_disclaimer_title: "अस्वीकरण",
+                footer_disclaimer_text: "यह वेबसाइट सामान्य जानकारी प्रदान करती है और पेशेवर चिकित्सा सलाह का विकल्प नहीं है। कृपया किसी भी चिकित्सा संबंधी चिंता के लिए स्वास्थ्य सेवा प्रदाता से परामर्श करें।"
+            },
+            mr: {
+                website_name: "सेव्हस्टेम",
+                nav_about: "आमच्याबद्दल",
+                nav_donation: "दान",
+                nav_inspiration: "प्रेरणा",
+                nav_hospitals: "रुग्णालये",
+                nav_faq: "सतत विचारले जाणारे प्रश्न",
+                hero_title: "जीवनदाता बना: स्टेम सेल दान करा",
+                hero_subtitle: "तुमचा दान करण्याचा निर्णय एखाद्याला जीवनाची दुसरी संधी देऊ शकतो. तुम्ही कसा बदल घडवू शकता ते जाणून घ्या.",
+                hero_button: "अधिक जाणून घ्या",
+                about_title: "स्टेम सेल्स काय आहेत?",
+                about_p1: "स्टेम पेशी या विशेष मानवी पेशी आहेत ज्यात स्नायूंच्या पेशींपासून ते मेंदूच्या पेशींपर्यंत अनेक वेगवेगळ्या प्रकारच्या पेशींमध्ये विकसित होण्याची क्षमता असते. काही प्रकरणांमध्ये, ते खराब झालेल्या ऊतींची दुरुस्ती देखील करू शकतात. संशोधक आणि डॉक्टरांना आशा आहे की स्टेम सेल थेरपीचा उपयोग अनेक वैद्यकीय परिस्थितींवर उपचार करण्यासाठी केला जाऊ शकतो.",
+                about_p2: "स्टेम सेल दान ही एक प्रक्रिया आहे जिथे एक स्वयंसेवक त्यांच्या स्टेम पेशी दान करतो, ज्या नंतर ल्युकेमिया, लिम्फोमा आणि इतर रक्त विकारांसारख्या रोगांवर उपचार करण्यासाठी रुग्णामध्ये प्रत्यारोपित केल्या जाऊ शकतात. स्टेम सेल संरक्षण, जे सहसा गर्भनाळेच्या रक्ताने केले जाते, त्यात भविष्यातील संभाव्य वापरासाठी स्टेम पेशी साठवणे समाविष्ट आहे.",
+                chart_title: "मासिक स्टेम सेल दान प्रमाण (उदाहरण)",
+                chart_subtitle: "हा तक्ता एका महिन्यात स्टेम सेल दानाच्या संभाव्य स्त्रोतांचे उदाहरण देण्यासाठी आहे.",
+                process_title: "स्टेम सेल दान प्रक्रिया",
+                process_step1_title: "1. नोंदणी",
+                process_step1_desc: "स्टेम सेल नोंदणीमध्ये सामील व्हा. यामध्ये तुमच्या ऊतकाचा प्रकार निश्चित करण्यासाठी गालाचा एक साधा स्वॅब घेणे समाविष्ट आहे.",
+                process_step2_title: "2. जुळणी",
+                process_step2_desc: "तुम्ही रुग्णासाठी जुळल्यास, तुम्हाला पुढील चाचणीसाठी संपर्क साधला जाईल आणि तुम्ही दान करण्यास इच्छुक आहात की नाही याची पुष्टी केली जाईल.",
+                process_step3_title: "3. दान",
+                process_step3_desc: "सर्वात सामान्य पद्धत म्हणजे पीबीएससी दान, जी प्लाझ्मा दान करण्यासारखीच आहे. अस्थिमज्जा दान ही एक कमी सामान्य शस्त्रक्रिया प्रक्रिया आहे.",
+                inspiration_title: "आशेच्या कथा",
+                story1_title: "रियाला दुसरी संधी",
+                story1_desc: "सात वर्षांची रिया ल्युकेमियाशी झुंज देत होती, तेव्हा एका अनोळखी व्यक्तीच्या निःस्वार्थ दानाने तिला जीवदान दिले. तिचा दाता, एक तरुण महाविद्यालयीन विद्यार्थी म्हणाला, 'हे एक साधे कृत्य होते, पण आज तिला हसताना पाहून मला माझ्या आयुष्यातील सर्वात अर्थपूर्ण गोष्ट केल्यासारखे वाटते.'",
+                story2_title: "अमितचा पुनर्प्राप्तीचा प्रवास",
+                story2_desc: "35 वर्षीय वडील अमितसाठी, एका दुर्मिळ रक्तविकाराविरुद्ध स्टेम सेल प्रत्यारोपण हीच एकमेव आशा होती. त्याची दुसऱ्या राज्यातील एका दात्याशी जुळणी झाली. 'ज्या व्यक्तीने मला माझ्या कुटुंबासोबत माझे भविष्य परत दिले, त्या व्यक्तीचा मी कायमचा आभारी आहे,' असे तो सांगतो.",
+                ngo_title: "स्वयंसेवी संस्था आणि नोंदणी",
+                ngo1_desc: "भारतातील एक आघाडीची रक्त स्टेम सेल दात्यांची नोंदणी.",
+                ngo2_desc: "रक्त कर्करोगाशी लढण्यासाठी समर्पित एक ना-नफा संस्था.",
+                ngo3_desc: "राष्ट्रीय अवयव आणि ऊतक प्रत्यारोपण संस्था.",
+                schemes_title: "सरकारी योजना",
+                scheme1_title: "थॅलेसेमिया बाल सेवा योजना",
+                scheme1_desc: "थॅलेसेमिया आणि अप्लास्टिक ॲनिमियाच्या रुग्णांसाठी अस्थिमज्जा प्रत्यारोपणासाठी आर्थिक सहाय्य प्रदान करणारी कोल इंडियाची सीएसआर पहल.",
+                scheme2_title: "राष्ट्रीय आरोग्य निधी (RAN) अंतर्गत आर्थिक सहाय्य",
+                scheme2_desc: "दारिद्र्यरेषेखालील रुग्णांना आर्थिक सहाय्य प्रदान करते, जे प्रमुख जीवघेण्या आजारांनी ग्रस्त आहेत, जेणेकरून ते कोणत्याही सुपर स्पेशालिटी रुग्णालय/संस्थेत वैद्यकीय उपचार घेऊ शकतील.",
+                contact_title: "आमच्याशी संपर्क साधा",
+                contact_chat_title: "आमच्या एआय बॉटशी चॅट करा",
+                contact_chat_desc: "आमच्या एआय-चालित सहाय्यकाकडून त्वरित उत्तरे मिळवा.",
+                contact_call_title: "आम्हाला कॉल करा",
+                hospitals_title: "रुग्णालय शोधा",
+                hospitals_state: "राज्य",
+                hospitals_city: "शहर",
+                hospitals_select_state: "राज्य निवडा",
+                hospitals_select_city: "शहर निवडा",
+                hospitals_no_results: "निवडलेल्या शहरासाठी कोणतेही परिणाम आढळले नाहीत.",
+                faq_title: "सतत विचारले जाणारे प्रश्न",
+                faq1_q: "स्टेम सेल दान वेदनादायक आहे का?",
+                faq1_a: "सर्वात सामान्य पद्धत, पीबीएससी दान, वेदनादायक नाही आणि प्लाझ्मा दान करण्यासारखीच आहे. अस्थिमज्जा दानासाठी, ही सामान्य भूल देऊन केली जाणारी शस्त्रक्रिया आहे, त्यामुळे तुम्हाला प्रक्रियेदरम्यान वेदना जाणवणार नाहीत. तुम्हाला काही दिवसांसाठी तुमच्या पाठीच्या खालच्या भागात काही वेदना जाणवू शकतात.",
+                faq2_q: "दान करण्याचे काही धोके आहेत का?",
+                faq2_a: "स्टेम सेल दान करणे खूप सुरक्षित आहे. पीबीएससी दानासाठी, स्टेम पेशी वाढवण्यासाठी तुम्हाला मिळणाऱ्या औषधामुळे हाडांमध्ये वेदना, स्नायूंमध्ये वेदना किंवा डोकेदुखीसारखे तात्पुरते दुष्परिणाम होऊ शकतात. अस्थिमज्जा दानासाठी, धोके कोणत्याही प्रक्रियेसारखेच आहेत ज्यात भूल देणे समाविष्ट आहे. तुमचे शरीर काही आठवड्यांत दान केलेल्या स्टेम पेशी बदलून टाकते.",
+                faq3_q: "कोण दान करण्यास पात्र आहे?",
+                faq3_a: "साधारणपणे, दात्यांचे वय 18 ते 44 वर्षांच्या दरम्यान असावे आणि ते चांगल्या आरोग्यामध्ये असावेत. काही वैद्यकीय परिस्थिती तुम्हाला अपात्र ठरवू शकतात. विशिष्ट निकष स्टेम सेल नोंदणीच्या वेबसाइटवर आढळू शकतात.",
+                faq4_q: "दाता बनण्यासाठी काही खर्च येतो का?",
+                faq4_a: "नाही, दात्याला कोणताही खर्च येत नाही. सर्व वैद्यकीय आणि प्रवासाचा खर्च नोंदणी किंवा रुग्णाच्या विम्याद्वारे केला जातो.",
+                chatbot_title: "✨ स्टेम सेल एआय बॉट",
+                chatbot_welcome: "नमस्कार! मी सेव्हस्टेम एआय बॉट आहे. मी तुम्हाला स्टेम सेल दानाबद्दलच्या तुमच्या प्रश्नांमध्ये कशी मदत करू शकेन?",
+                chatbot_send: "पाठवा",
+                chatbot_placeholder: "एक प्रश्न विचारा...",
+                footer_desc: "जागरूकता वाढवणे आणि जीवन वाचवण्यासाठी स्टेम सेल दानाची सोय करणे.",
+                footer_links: "जलद दुवे",
+                footer_disclaimer_title: "अस्वीकरण",
+                footer_disclaimer_text: "ही वेबसाइट सामान्य माहिती प्रदान करते आणि व्यावसायिक वैद्यकीय सल्ल्याचा पर्याय नाही. कृपया कोणत्याही वैद्यकीय समस्यांसाठी आरोग्य सेवा प्रदात्याचा सल्ला घ्या."
+            }
+        };
+
+        const languageSelect = document.getElementById('language-select');
+        
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (translations[lang] && translations[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.placeholder) {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang;
+        }
+
+        languageSelect.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIconLight = document.getElementById('theme-icon-light');
+        const themeIconDark = document.getElementById('theme-icon-dark');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark');
+                themeIconLight.classList.add('hidden');
+                themeIconDark.classList.remove('hidden');
+            } else {
+                body.classList.remove('dark');
+                themeIconLight.classList.remove('hidden');
+                themeIconDark.classList.add('hidden');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+             if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+
+            const savedLang = localStorage.getItem('language') || 'en';
+            languageSelect.value = savedLang;
+            setLanguage(savedLang);
+        });
+
+
+        // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Pie Chart
+        const ctx = document.getElementById('donationPieChart').getContext('2d');
+        const donationPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['PBSC Donation', 'Bone Marrow Donation', 'Cord Blood Units'],
+                datasets: [{
+                    label: 'Donation Types',
+                    data: [65, 10, 25],
+                    backgroundColor: [
+                        'rgba(99, 102, 241, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(167, 139, 250, 0.8)',
+                    ],
+                    borderColor: [
+                        'rgba(99, 102, 241, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(167, 139, 250, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                }
+            }
+        });
+
+        // Hospital Locator
+        const allStates = [
+            "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+        ];
+        
+        const hospitalData = {
+            "Maharashtra": {
+                "Mumbai": [
+                    { name: "Kokilaben Dhirubhai Ambani Hospital", location: "Andheri West", contact: "022-3066-6666", link: "https://www.kokilabenhospital.com/" },
+                    { name: "Tata Memorial Hospital", location: "Parel", contact: "022-2417-7000", link: "https://tmc.gov.in/" },
+                ],
+                "Pune": [
+                    { name: "Manipal Hospital", location: "Kharadi", contact: "1800-102-5555", link: "https://www.manipalhospitals.com/pune/" },
+                    { name: "Sahyadri Super Speciality Hospital", location: "Deccan Gymkhana", contact: "020-6721-5000", link: "https://sahyadrihospital.com/" },
+                ],
+                "Nagpur": [],
+                "Nashik": [],
+                "Aurangabad": []
+            },
+            "Karnataka": {
+                "Bengaluru": [
+                    { name: "Mazumdar Shaw Cancer Center", location: "Bommasandra", contact: "080-7122-2222", link: "https://www.narayanahealth.org/hospitals/bangalore/mazumdar-shaw-medical-center" },
+                ],
+                "Mysuru": [],
+                "Mangaluru": [],
+                "Hubballi": []
+            },
+            "Delhi": {
+                "New Delhi": [
+                     { name: "AIIMS", location: "Ansari Nagar", contact: "011-2658-8500", link: "https://www.aiims.edu/" },
+                     { name: "Indraprastha Apollo Hospitals", location: "Sarita Vihar", contact: "011-2692-5858", link: "https://delhi.apollohospitals.com/" }
+                ]
+            },
+            "Tamil Nadu": {
+                "Chennai": [
+                    { name: "Apollo Cancer Centre", location: "Teynampet", contact: "044-2433-6119", link: "https://chennai.apollohospitals.com/cancer-care/" }
+                ],
+                "Coimbatore": [],
+                "Madurai": []
+            }
+        };
+
+        const stateSelect = document.getElementById('state-select');
+        const citySelect = document.getElementById('city-select');
+        const hospitalList = document.getElementById('hospital-list');
+
+        allStates.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        });
+
+        stateSelect.addEventListener('change', () => {
+            const selectedState = stateSelect.value;
+            citySelect.innerHTML = '<option value="" data-translate-key="hospitals_select_city">Select City</option>';
+            hospitalList.innerHTML = '';
+            setLanguage(localStorage.getItem('language') || 'en'); 
+
+            if (selectedState && hospitalData[selectedState]) {
+                const cities = Object.keys(hospitalData[selectedState]);
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+
+        citySelect.addEventListener('change', () => {
+            const selectedState = stateSelect.value;
+            const selectedCity = citySelect.value;
+            hospitalList.innerHTML = '';
+
+            if (selectedState && selectedCity && hospitalData[selectedState] && hospitalData[selectedState][selectedCity] !== undefined) {
+                const hospitals = hospitalData[selectedState][selectedCity];
+                if (hospitals.length > 0) {
+                    hospitals.forEach(hospital => {
+                        const hospitalCard = `
+                            <div class="border border-gray-200 dark:border-gray-700 p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                                <h4 class="font-bold text-lg text-indigo-700 dark:text-indigo-400">${hospital.name}</h4>
+                                <p><strong>Location:</strong> ${hospital.location}</p>
+                                <p><strong>Contact:</strong> ${hospital.contact}</p>
+                                <a href="${hospital.link}" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline">Visit Website</a>
+                            </div>
+                        `;
+                        hospitalList.innerHTML += hospitalCard;
+                    });
+                } else {
+                     hospitalList.innerHTML = `<p class="text-center text-gray-500" data-translate-key="hospitals_no_results">No results found for the selected city.</p>`;
+                }
+            } else if (selectedCity) {
+                hospitalList.innerHTML = `<p class="text-center text-gray-500" data-translate-key="hospitals_no_results">No results found for the selected city.</p>`;
+            }
+            setLanguage(localStorage.getItem('language') || 'en'); 
+        });
+
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('svg');
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+
+        // --- GEMINI-POWERED CHATBOT ---
+        const chatOpenButton = document.getElementById('chat-open-button');
+        const chatCloseButton = document.getElementById('chat-close-button');
+        const chatWidget = document.getElementById('chat-widget');
+        const chatBody = document.getElementById('chat-body');
+        const chatInput = document.getElementById('chat-input');
+        const chatSendButton = document.getElementById('chat-send-button');
+        const contactChatButton = document.getElementById('contact-chat-button');
+
+        function openChat() {
+            chatWidget.style.display = 'flex';
+            chatOpenButton.style.display = 'none';
+        }
+
+        chatOpenButton.addEventListener('click', openChat);
+        contactChatButton.addEventListener('click', openChat);
+
+        chatCloseButton.addEventListener('click', () => {
+            chatWidget.style.display = 'none';
+            chatOpenButton.style.display = 'block';
+        });
+
+        function addMessageToChat(message, sender) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble');
+            bubble.classList.add(sender === 'user' ? 'user-bubble' : 'bot-bubble');
+            bubble.textContent = message;
+            chatBody.appendChild(bubble);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        async function getBotResponse(userInput) {
+            const prompt = `You are a friendly and helpful AI assistant named SaveStem AI Bot on a website about stem cell donation. Your goal is to provide accurate, encouraging, and easy-to-understand information. Keep your answers concise. User's question: "${userInput}"`;
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('bot-bubble');
+            typingIndicator.innerHTML = 'Thinking...';
+            chatBody.appendChild(typingIndicator);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            const response = await callGeminiAPI(prompt);
+            
+            chatBody.removeChild(typingIndicator);
+            addMessageToChat(response, 'bot');
+        }
+
+        async function handleChatSubmit() {
+            const userInput = chatInput.value.trim();
+            if (userInput) {
+                addMessageToChat(userInput, 'user');
+                chatInput.value = '';
+                chatSendButton.disabled = true;
+                await getBotResponse(userInput);
+                chatSendButton.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        chatSendButton.addEventListener('click', handleChatSubmit);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleChatSubmit();
+            }
+        });
+
+    </script>
+</body>
+</html>
