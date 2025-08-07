@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveStem - A Lifesaving Initiative</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #10B981; /* Emerald 500 */
+            --secondary-color: #0F172A; /* Slate 900 */
+            --accent-color: #F59E0B; /* Amber 500 */
+            --light-bg: #F8FAFC; /* Slate 50 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--secondary-color);
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), url('https://images.unsplash.com/photo-1578611026913-c8d38159d3f8?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+        }
+        .chat-bubble {
+            max-width: 75%;
+        }
+        .primary-bg { background-color: var(--primary-color); }
+        .primary-text { color: var(--primary-color); }
+        .hover-primary-bg:hover { background-color: #059669; } /* Emerald 600 */
+        .secondary-bg { background-color: var(--secondary-color); }
+        .accent-bg { background-color: var(--accent-color); }
+        .focus-ring-primary:focus {
+            ring-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <svg class="w-12 h-12 primary-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.94 14.5c-.49.49-1.28.49-1.77 0l-1.41-1.41c-.49-.49-.49-1.28 0-1.77.49-.49 1.28-.49 1.77 0l1.41 1.41c.49.49.49 1.28 0 1.77zm4.71-8.73l-1.41-1.41c-.49-.49-1.28-.49-1.77 0-.49.49-.49 1.28 0 1.77l1.41 1.41c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77zM12 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6.18-2.06c.49-.49.49-1.28 0-1.77l-1.41-1.41c-.49-.49-1.28-.49-1.77 0-.49.49-.49 1.28 0 1.77l1.41 1.41c.49.49 1.28.49 1.77 0z"/>
+                </svg>
+                <span class="text-3xl font-bold secondary-text">SaveStem</span>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-600 hover:primary-text">About</a>
+                <a href="#how-to-donate" class="text-gray-600 hover:primary-text">How to Donate</a>
+                <a href="#stories" class="text-gray-600 hover:primary-text">Stories</a>
+                <a href="#hospitals" class="text-gray-600 hover:primary-text">Find Hospitals</a>
+                <a href="#faq" class="text-gray-600 hover:primary-text">FAQ</a>
+            </div>
+            <button class="md:hidden flex items-center">
+                <i class="fas fa-bars text-gray-600 text-2xl"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white">
+        <div class="container mx-auto px-6 py-32 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">A Single Cell Can Rewrite a Life.</h1>
+            <p class="text-lg md:text-xl mb-8">Your decision to donate stem cells can be the cure someone is praying for. Join the registry.</p>
+            <a href="#how-to-donate" class="primary-bg hover-primary-bg text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg">Discover How</a>
+        </div>
+    </section>
+
+    <!-- About Stem Cells Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">The Miracle of Stem Cells</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">They are the body's raw materials — cells from which all other cells with specialized functions are generated.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">The Power of Donation</h3>
+                    <p class="text-gray-600 mb-4">For patients with diseases like leukemia, lymphoma, and thalassemia, a stem cell transplant is more than a treatment; it's a second chance at life. A donation from a matching, unrelated donor can rebuild their entire immune system and offer a cure.</p>
+                    <p class="text-gray-600">Becoming a donor is a profound act of kindness. The process is safe, and your contribution is immeasurable.</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">The Promise of Preservation</h3>
+                    <p class="text-gray-600 mb-4">Banking your baby's umbilical cord blood is a forward-thinking health investment. These powerful stem cells are a perfect genetic match for your child and have a high probability of matching other family members, potentially treating dozens of diseases.</p>
+                    <p class="text-gray-600">It's a biological safety net, providing peace of mind for your family's future health challenges.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Donate/Preserve Section -->
+    <section id="how-to-donate" class="bg-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Your Guide to Giving Life</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">Here’s how you can become a donor or preserve your baby's stem cells.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Donation Steps -->
+                <div class="bg-light-bg p-8 rounded-lg shadow-md border-l-4 border-emerald-500">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Donating Stem Cells</h3>
+                    <ol class="space-y-4">
+                        <li class="flex items-start"><div class="primary-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">1</div><div><h4 class="font-semibold">Register Online</h4><p class="text-gray-600 text-sm">Join a stem cell registry. You'll fill out a form and receive a simple cheek swab kit at home.</p></div></li>
+                        <li class="flex items-start"><div class="primary-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">2</div><div><h4 class="font-semibold">Swab & Send</h4><p class="text-gray-600 text-sm">Collect a sample of your cheek cells with the swab and mail it back. Your tissue type will be added to the registry.</p></div></li>
+                        <li class="flex items-start"><div class="primary-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">3</div><div><h4 class="font-semibold">Wait for a Match</h4><p class="text-gray-600 text-sm">If you are a match for a patient, you'll be contacted for further testing.</p></div></li>
+                        <li class="flex items-start"><div class="primary-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">4</div><div><h4 class="font-semibold">Donate & Save a Life</h4><p class="text-gray-600 text-sm">Most donations are like giving blood (PBSC donation). In rare cases, it involves a minor surgical procedure to collect marrow from the hip bone.</p></div></li>
+                    </ol>
+                </div>
+                <!-- Preservation Steps -->
+                <div class="bg-light-bg p-8 rounded-lg shadow-md border-l-4 border-amber-500">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Preserving Cord Blood</h3>
+                    <ol class="space-y-4">
+                        <li class="flex items-start"><div class="accent-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">1</div><div><h4 class="font-semibold">Choose a Cord Blood Bank</h4><p class="text-gray-600 text-sm">Research and select a reputable public or private cord blood bank before your baby is due.</p></div></li>
+                        <li class="flex items-start"><div class="accent-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">2</div><div><h4 class="font-semibold">Receive a Collection Kit</h4><p class="text-gray-600 text-sm">The bank will send you a kit to take to the hospital on delivery day.</p></div></li>
+                        <li class="flex items-start"><div class="accent-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">3</div><div><h4 class="font-semibold">Inform Your Doctor</h4><p class="text-gray-600 text-sm">Let your medical team know you plan to collect the cord blood. The collection is safe and painless for both mother and baby.</p></div></li>
+                        <li class="flex items-start"><div class="accent-bg text-white rounded-full w-8 h-8 text-center leading-8 font-bold mr-4 flex-shrink-0">4</div><div><h4 class="font-semibold">Collection & Storage</h4><p class="text-gray-600 text-sm">After birth, the cord blood is collected and sent to the bank for processing and long-term cryogenic storage.</p></div></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real Life Stories Section -->
+    <section id="stories" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Stories of Hope</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">Real lives, real impact. See how stem cell donation changes everything.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                    <img src="https://media.istockphoto.com/id/941782244/photo/portrait-of-a-young-school-boy-smiling.jpg?s=612x612&w=0&k=20&c=aUC2sBPiNAHNItWWrAZ1scbwEmcSxBgptte9BXkOJfA=">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Aarav's Second Chance</h3>
+                        <p class="text-gray-600 text-sm">"Diagnosed with leukemia at age 5, Aarav's only hope was a stem cell transplant. A stranger's donation gave him back his childhood. Today, he is a healthy, happy 10-year-old who loves cricket."</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                    <img src="https://t4.ftcdn.net/jpg/06/69/94/95/360_F_669949543_pjYCcz8Gh14gSjDgbTzKTOyVU3h5fw6X.jpg" alt="Mother and baby" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Priya's Gift of Life</h3>
+                        <p class="text-gray-600 text-sm">"When Priya gave birth, she decided to donate her daughter's cord blood. Years later, those stem cells saved a young boy battling thalassemia. Her decision gave another family the ultimate gift."</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                    <img src="https://media.istockphoto.com/id/499907722/photo/portrait-of-a-beautifull-smiling-man.jpg?s=612x612&w=0&k=20&c=hY8vXBfdJPJcZwhnEi-I59PAofMeBnRlpldsK2ozSNw=">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Rohan's Courage</h3>
+                        <p class="text-gray-600 text-sm">"Rohan, a 25-year-old engineer, registered as a donor after a college awareness drive. A year later, he was a match. 'It was a small thing for me, but it meant the world to someone else,' he says."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Donor Count Section -->
+    <section class="primary-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold">Join a Growing Movement</h2>
+            <p class="mt-4 mb-8 text-emerald-100">Registered Stem Cell Donors in India</p>
+            <div id="donor-count" class="text-6xl font-bold tracking-tight">611,740</div>
+            <p class="mt-4 text-emerald-200">...and counting. Be the next one to register!</p>
+        </div>
+    </section>
+
+    <!-- Hospital Finder Section -->
+    <section id="hospitals" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Find a Donation Center</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">Locate a hospital or collection center near you to begin your journey.</p>
+            </div>
+            <div class="max-w-4xl mx-auto bg-light-bg p-8 rounded-lg shadow-md">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="state-select" class="block text-sm font-medium text-gray-700 mb-2">Select State</label>
+                        <select id="state-select" class="w-full p-3 border border-gray-300 rounded-md focus-ring-primary">
+                            <option value="">-- Select a State --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="city-select" class="block text-sm font-medium text-gray-700 mb-2">Select City</label>
+                        <select id="city-select" class="w-full p-3 border border-gray-300 rounded-md focus-ring-primary" disabled>
+                            <option value="">-- Select a City --</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="hospital-list" class="mt-8">
+                    <p class="text-center text-gray-500">Please select a state and city to see results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section id="chat" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Have Questions? Chat With Us!</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">Our experts are here to help you with any queries you have about stem cell donation.</p>
+            </div>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
+                <div class="p-4 primary-bg text-white rounded-t-lg">
+                    <h3 class="font-bold text-lg">Chat with a SaveStem Professional</h3>
+                </div>
+                <div id="chat-box" class="p-6 h-80 overflow-y-auto bg-gray-50">
+                    <div class="flex justify-start mb-4">
+                        <div class="bg-gray-200 p-3 rounded-lg chat-bubble">
+                            <p class="text-sm">Hello! Ask me anything about stem cell donation. Try asking about 'cost', 'pain', or 'eligibility'.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-200 flex">
+                    <input type="text" id="chat-input" placeholder="Type your message..." class="w-full p-3 border border-gray-300 rounded-l-md focus-ring-primary">
+                    <button id="send-btn" class="primary-bg hover-primary-bg text-white font-bold py-3 px-6 rounded-r-md">Send</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="bg-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Frequently Asked Questions</h2>
+            </div>
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="faq-item bg-light-bg rounded-lg shadow-sm"><button class="faq-question w-full text-left p-6 flex justify-between items-center"><span class="font-semibold text-lg">Is donating stem cells painful?</span><i class="fas fa-chevron-down"></i></button><div class="faq-answer hidden p-6 pt-0"><p class="text-gray-600">Most donations (90%) are done through a process similar to donating plasma, called PBSC donation, which is non-surgical. Donors may experience flu-like symptoms. For bone marrow donation, it's a surgical procedure under anesthesia, so you feel no pain during the collection. Post-procedure soreness is common but manageable.</p></div></div>
+                <div class="faq-item bg-light-bg rounded-lg shadow-sm"><button class="faq-question w-full text-left p-6 flex justify-between items-center"><span class="font-semibold text-lg">Who is eligible to donate?</span><i class="fas fa-chevron-down"></i></button><div class="faq-answer hidden p-6 pt-0"><p class="text-gray-600">Generally, donors must be between 18 and 44 years old and in good health. Specific eligibility criteria can vary by registry, so it's best to check with the organization you register with.</p></div></div>
+                <div class="faq-item bg-light-bg rounded-lg shadow-sm"><button class="faq-question w-full text-left p-6 flex justify-between items-center"><span class="font-semibold text-lg">Does it cost anything to donate?</span><i class="fas fa-chevron-down"></i></button><div class="faq-answer hidden p-6 pt-0"><p class="text-gray-600">No. All medical costs for the donation procedure are covered by the patient's medical insurance or the registry. You will never be asked to pay.</p></div></div>
+                <div class="faq-item bg-light-bg rounded-lg shadow-sm"><button class="faq-question w-full text-left p-6 flex justify-between items-center"><span class="font-semibold text-lg">What are the chances of being a match?</span><i class="fas fa-chevron-down"></i></button><div class="faq-answer hidden p-6 pt-0"><p class="text-gray-600">The chance of being a match is relatively low, which is why a large and diverse registry is so important. Your tissue type is inherited, so patients are most likely to match someone of the same ethnic background.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="secondary-bg text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 SaveStem. All Rights Reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">A lifesaving initiative to connect donors with patients in need.</p>
+            <div class="flex justify-center space-x-6 mt-6">
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Live Donor Count
+        const donorCountElement = document.getElementById('donor-count');
+        if (donorCountElement) {
+            let currentCount = 611740;
+            setInterval(() => {
+                currentCount += Math.floor(Math.random() * 3) + 1;
+                donorCountElement.innerText = currentCount.toLocaleString();
+            }, 3000);
+        }
+
+        // Hospital Finder
+        const hospitalData = {
+            "Andaman & Nicobar Islands": { "Port Blair": [] },
+            "Andhra Pradesh": { "Visakhapatnam": [{ name: "Apollo Hospitals", contact: "0891-2727272", location: "Health City, Arilova" }], "Vijayawada": [{ name: "Manipal Hospitals", contact: "0866-2458888", location: "Tadepalli" }] },
+            "Arunachal Pradesh": { "Itanagar": [] },
+            "Assam": { "Guwahati": [{ name: "Apollo Hospitals", contact: "0361-7135000", location: "GS Road" }] },
+            "Bihar": { "Patna": [{ name: "Paras HMRI Hospital", contact: "0612-7107777", location: "Bailey Road" }] },
+            "Chandigarh": { "Chandigarh": [{ name: "PGIMER", contact: "0172-2747585", location: "Sector 12" }] },
+            "Chhattisgarh": { "Raipur": [{ name: "Ramkrishna CARE Hospitals", contact: "0771-3501700", location: "Pachpedi Naka" }] },
+            "Dadra & Nagar Haveli and Daman & Diu": { "Daman": [], "Silvassa": [] },
+            "Delhi": { "New Delhi": [{ name: "AIIMS", contact: "011-26588500", location: "Ansari Nagar" }, { name: "Army Hospital (R&R)", contact: "011-25681944", location: "Delhi Cantt" }, { name: "Indraprastha Apollo Hospitals", contact: "011-71791090", location: "Sarita Vihar" }] },
+            "Goa": { "Panaji": [] },
+            "Gujarat": { "Ahmedabad": [{ name: "Gujarat Cancer & Research Institute", contact: "079-22688000", location: "Asarwa" }, { name: "Apollo Hospitals", contact: "079-66721000", location: "Bhat, GIDC Estate" }], "Surat": [], "Vadodara": [] },
+            "Haryana": { "Gurugram": [{ name: "Fortis Memorial Research Institute", contact: "0124-4962200", location: "Sector 44" }, { name: "Medanta - The Medicity", contact: "0124-4141414", location: "Sector 38" }], "Faridabad": [] },
+            "Himachal Pradesh": { "Shimla": [] },
+            "Jammu & Kashmir": { "Srinagar": [], "Jammu": [] },
+            "Jharkhand": { "Ranchi": [] },
+            "Karnataka": { "Bengaluru": [{ name: "Manipal Hospital", contact: "1800-102-5555", location: "Old Airport Road" }, { name: "St. John's Medical College Hospital", contact: "080-22065000", location: "Sarjapur Road" }, { name: "Narayana Health City", contact: "080-71222222", location: "Bommasandra" }], "Mangaluru": [], "Mysuru": [] },
+            "Kerala": { "Kochi": [{ name: "Amrita Hospital", contact: "0484-2851234", location: "Ponekkara" }], "Thiruvananthapuram": [] },
+            "Ladakh": { "Leh": [] },
+            "Lakshadweep": { "Kavaratti": [] },
+            "Madhya Pradesh": { "Indore": [{ name: "Apollo Hospitals", contact: "0731-2445566", location: "Scheme No 74C, Sector D" }], "Bhopal": [] },
+            "Maharashtra": { "Mumbai": [{ name: "Tata Memorial Hospital", contact: "022-24177000", location: "Dr E Borges Rd, Parel" }, { name: "Jaslok Hospital", contact: "022-66573333", location: "Dr. G. Deshmukh Marg" }, { name: "Kokilaben Dhirubhai Ambani Hospital", contact: "022-30999999", location: "Andheri West" }], "Pune": [{ name: "Sahyadri Hospital", contact: "020-67213000", location: "Deccan Gymkhana" }], "Nagpur": [] },
+            "Manipur": { "Imphal": [] },
+            "Meghalaya": { "Shillong": [] },
+            "Mizoram": { "Aizawl": [] },
+            "Nagaland": { "Kohima": [] },
+            "Odisha": { "Bhubaneswar": [{ name: "Apollo Hospitals", contact: "0674-6661066", location: "Sainik School Road" }] },
+            "Puducherry": { "Puducherry": [{ name: "JIPMER", contact: "0413-2296000", location: "Dhanvantari Nagar" }] },
+            "Punjab": { "Ludhiana": [{ name: "Dayanand Medical College & Hospital", contact: "0161-4688800", location: "Tagore Nagar" }], "Amritsar": [] },
+            "Rajasthan": { "Jaipur": [{ name: "Sawai Man Singh Hospital", contact: "0141-2518222", location: "JLN Marg" }], "Jodhpur": [] },
+            "Sikkim": { "Gangtok": [] },
+            "Tamil Nadu": { "Chennai": [{ name: "Apollo Cancer Hospital", contact: "044-24331740", location: "Mount Road, Teynampet" }, { name: "Christian Medical College (CMC)", contact: "0416-2281000", location: "Vellore (nearby city)" }], "Coimbatore": [] },
+            "Telangana": { "Hyderabad": [{ name: "Apollo Hospitals", contact: "040-23607777", location: "Jubilee Hills" }, { name: "Basavatarakam Indo American Cancer Hospital", contact: "040-23551235", location: "Banjara Hills" }] },
+            "Tripura": { "Agartala": [] },
+            "Uttar Pradesh": { "Lucknow": [{ name: "Sanjay Gandhi Postgraduate Institute", contact: "0522-2494070", location: "Raebareli Road" }], "Noida": [{ name: "Fortis Hospital", contact: "0120-4300222", location: "Sector 62" }], "Varanasi": [] },
+            "Uttarakhand": { "Dehradun": [] },
+            "West Bengal": { "Kolkata": [{ name: "Tata Medical Center", contact: "033-66057000", location: "New Town, Rajarhat" }, { name: "Apollo Gleneagles Hospitals", contact: "033-23203040", location: "Canal Circular Road" }] }
+        };
+
+        const stateSelect = document.getElementById('state-select');
+        const citySelect = document.getElementById('city-select');
+        const hospitalList = document.getElementById('hospital-list');
+
+        if (stateSelect) {
+            for (const state in hospitalData) {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            }
+
+            stateSelect.addEventListener('change', (e) => {
+                const selectedState = e.target.value;
+                citySelect.innerHTML = '<option value="">-- Select a City --</option>';
+                hospitalList.innerHTML = '<p class="text-center text-gray-500">Please select a city to see results.</p>';
+                citySelect.disabled = true;
+
+                if (selectedState) {
+                    const cities = Object.keys(hospitalData[selectedState]);
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                    citySelect.disabled = false;
+                }
+            });
+
+            citySelect.addEventListener('change', (e) => {
+                const selectedState = stateSelect.value;
+                const selectedCity = e.target.value;
+                hospitalList.innerHTML = '';
+
+                if (selectedCity) {
+                    const hospitals = hospitalData[selectedState][selectedCity];
+                    if (hospitals.length > 0) {
+                        let html = `<h3 class="text-xl font-bold mb-4">Hospitals in ${selectedCity}</h3>`;
+                        html += '<div class="space-y-4">';
+                        hospitals.forEach(hospital => {
+                            html += `<div class="p-4 bg-white rounded-md border border-gray-200"><h4 class="font-semibold">${hospital.name}</h4><p class="text-sm text-gray-600">Contact: ${hospital.contact}</p><p class="text-sm text-gray-600">Location: ${hospital.location}</p></div>`;
+                        });
+                        html += '</div>';
+                        hospitalList.innerHTML = html;
+                    } else {
+                        hospitalList.innerHTML = `<div class="text-center p-4 bg-yellow-100 border border-yellow-300 rounded-md"><p class="font-semibold text-yellow-800">Record Not Found</p><p class="text-sm text-yellow-700">We couldn't find any registered centers in ${selectedCity}. Please check back later or contact a national registry for more information.</p></div>`;
+                    }
+                }
+            });
+        }
+
+        // Chat
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        if (chatBox) {
+            const chatResponses = {
+                "pain": "Most donations (90%) are non-surgical and feel similar to donating plasma. For the 10% that are surgical, it's done under anesthesia, so you won't feel pain during the procedure.",
+                "cost": "There is absolutely no cost to the donor. All medical and travel expenses are covered by the registry or the patient's insurance.",
+                "eligible": "Generally, donors must be between 18 and 44 years old, in good health, and willing to donate to any patient in need. You can check the specific criteria on a registry's website.",
+                "how": "The first step is to join a registry online. They will send you a cheek swab kit. You just swab your cheek and mail it back. That's it! You'll only be contacted if you're a potential match for a patient.",
+                "default": "That's a great question. While I can answer basic queries, an expert can provide more detailed information. They will review your question and get back to you soon. In the meantime, have you checked our FAQ section?"
+            };
+
+            const handleSend = () => {
+                const message = chatInput.value.trim().toLowerCase();
+                if (message) {
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'flex justify-end mb-4';
+                    userMessage.innerHTML = `<div class="primary-bg text-white p-3 rounded-lg chat-bubble"><p class="text-sm">${chatInput.value}</p></div>`;
+                    chatBox.appendChild(userMessage);
+                    
+                    let response = chatResponses.default;
+                    for (const keyword in chatResponses) {
+                        if (message.includes(keyword)) {
+                            response = chatResponses[keyword];
+                            break;
+                        }
+                    }
+
+                    chatInput.value = '';
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    setTimeout(() => {
+                        const botMessage = document.createElement('div');
+                        botMessage.className = 'flex justify-start mb-4';
+                        botMessage.innerHTML = `<div class="bg-gray-200 p-3 rounded-lg chat-bubble"><p class="text-sm">${response}</p></div>`;
+                        chatBox.appendChild(botMessage);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }, 1200);
+                }
+            };
+
+            sendBtn.addEventListener('click', handleSend);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSend();
+                }
+            });
+        }
+
+        // FAQ Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('i');
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
+
+        // Mobile Menu
+        const menuButton = document.querySelector('header button');
+        const mobileMenu = document.querySelector('.hidden.md\\:flex');
+        if (menuButton) {
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
